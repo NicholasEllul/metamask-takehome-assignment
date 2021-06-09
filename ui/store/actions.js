@@ -3708,5 +3708,11 @@ export function cancelQRHardwareSignRequest() {
   return async (dispatch) => {
     dispatch(hideLoadingIndication());
     await promisifiedBackground.cancelQRHardwareSignRequest();
+  }
+}
+
+export function resetBlockList() {
+  return () => {
+    return promisifiedBackground.resetBlockList();
   };
 }
