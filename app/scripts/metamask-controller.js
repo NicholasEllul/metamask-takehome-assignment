@@ -1031,6 +1031,7 @@ export default class MetamaskController extends EventEmitter {
         CurrencyController: this.currencyRateController,
         AlertController: this.alertController.store,
         OnboardingController: this.onboardingController.store,
+        BlockController: this.blockController.store,
         IncomingTransactionsController: this.incomingTransactionsController
           .store,
         PermissionController: this.permissionController,
@@ -1049,7 +1050,6 @@ export default class MetamaskController extends EventEmitter {
         ///: BEGIN:ONLY_INCLUDE_IN(flask)
         SnapController: this.snapController,
         ///: END:ONLY_INCLUDE_IN
-        BlockController: this.blockController.store,
       },
       controllerMessenger: this.controllerMessenger,
     });
@@ -1428,6 +1428,7 @@ export default class MetamaskController extends EventEmitter {
       smartTransactionsController,
       txController,
       assetsContractController,
+      blockController,
     } = this;
 
     return {
@@ -1909,9 +1910,9 @@ export default class MetamaskController extends EventEmitter {
           )
         : null,
 
-      resetBlockList: this.blockController.resetBlockList.bind(
-        this.blockController,
-      ),
+      // Block List Tab
+      resetBlockList: blockController.resetBlockList.bind(blockController),
+      setDisplayAsHex: blockController.setDisplayAsHex.bind(blockController),
 
       /** Token Detection V2 */
       addDetectedTokens: process.env.TOKEN_DETECTION_V2
