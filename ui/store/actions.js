@@ -3708,11 +3708,22 @@ export function cancelQRHardwareSignRequest() {
   return async (dispatch) => {
     dispatch(hideLoadingIndication());
     await promisifiedBackground.cancelQRHardwareSignRequest();
-  }
+  };
 }
 
 export function resetBlockList() {
-  return () => {
-    return promisifiedBackground.resetBlockList();
+  return async (dispatch) => {
+    await promisifiedBackground.resetBlockList();
+    dispatch({ type: actionConstants.CLEAR_BLOCK_LIST });
+  };
+}
+
+export function setDisplayAsHex(displayAsHex) {
+  return async (dispatch) => {
+    await promisifiedBackground.setDisplayAsHex(displayAsHex);
+    dispatch({
+      type: actionConstants.SET_DISPLAY_BLOCK_LIST_AS_HEX,
+      value: displayAsHex,
+    });
   };
 }

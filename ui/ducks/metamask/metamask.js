@@ -199,6 +199,20 @@ export default function reduceMetamask(state = {}, action) {
       };
     }
 
+    case actionConstants.CLEAR_BLOCK_LIST: {
+      return {
+        ...metamaskState,
+        blocks: {},
+      };
+    }
+
+    case actionConstants.SET_DISPLAY_BLOCK_LIST_AS_HEX: {
+      return {
+        ...metamaskState,
+        displayAsHex: action.value,
+      };
+    }
+
     default:
       return metamaskState;
   }
