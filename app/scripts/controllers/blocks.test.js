@@ -102,6 +102,30 @@ describe('BlocksController', function () {
     });
   });
 
+  describe('_withAdditionalFields', function () {
+    it('should return the largest transaction from the block', async function () {
+      const blockController = createBlockController();
+      const block = {
+        transactions: [{ value: '0x1' }, { value: '0x23' }, { value: '0x2' }],
+      };
+
+      const additionalFields = blockController._additionalBlockFields(block);
+
+      assert.strictEqual(additionalFields.largestTransactionInWei, '0x23');
+    });
+
+    it('should return 0 as the largest transaction if none exist', function () {
+      const blockController = createBlockController();
+      const block = {
+        transactions: [],
+      };
+
+      const additionalFields = blockController._additionalBlockFields(block);
+
+      assert.strictEqual(additionalFields.largestTransactionInWei, '0x0');
+    });
+  });
+
   describe('_calculateLastBlockSynced', function () {
     it('should return the last block synced if it exists', function () {
       const blockController = createBlockController();
@@ -195,6 +219,7 @@ function getMockBlock(modifications) {
     gasLimit: '0x4',
     gasUsed: '0x5',
     transactions: [{ value: '0x6' }],
+    largestTransactionInWei: '0x6',
     ...modifications,
   };
 }

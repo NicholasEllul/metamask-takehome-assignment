@@ -1,6 +1,12 @@
+import BigNumber from 'bignumber.js';
 import { ObservableStore } from '@metamask/obs-store';
 import { getUniqueId } from 'json-rpc-engine';
 import pify from 'pify';
+
+import {
+  hexToDecimal,
+  decimalToHex,
+} from '../../../ui/helpers/utils/conversions.util';
 
 export default class BlockController {
   /**
@@ -112,12 +118,45 @@ export default class BlockController {
           ...state.blocks,
           [blockNumber]: {
             ...blockData,
+            ...this._additionalBlockFields(blockData),
           },
         },
       });
     }
   }
 
+  /**
+   * Decorates our block data with additional fields we calculate.
+   * Currently we calculate and store the largest transaction in wei.
+   *
+   * @private
+   * @param {Object} blockData - The block data to decorate
+   * @param {Array} blockData.transactions - The transactions in the block
+   * @returns {Object} Block data with additional fields
+   */
+
+  _additionalBlockFields(blockData) {
+    if (blockData.transactions.length === 0) {
+      return {
+        largestTransactionInWei: '0x0',
+      };
+    }
+
+    const firstTransaction = blockData.transactions[0];
+    const largestTransaction = blockData.transactions.reduce(
+      (largestTx, tx) => {
+        const txValue = new BigNumber(tx.value);
+        const largestTxValue = new BigNumber(largestTx.value);
+
+        return txValue.gt(largestTxValue) ? tx : largestTx;
+      },
+      firstTransaction,
+    );
+
+    return {
+      largestTransactionInWei: largestTransaction.value,
+    };
+  }
 
   /**
    * Inspects the list of synced blocks, and returns the block number of the last that we synced
