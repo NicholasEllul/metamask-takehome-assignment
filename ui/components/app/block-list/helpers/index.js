@@ -1,1 +1,1 @@
-export { humanizeAttributeName } from './helpers';
+export { sortBlockNumbers, humanizeAttributeName } from './helpers';

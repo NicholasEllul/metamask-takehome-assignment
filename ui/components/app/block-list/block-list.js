@@ -1,40 +1,39 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { resetBlockList } from '../../../store/actions';
-
-import Button from '../../ui/button';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setDisplayAsHex, resetBlockList } from '../../../store/actions';
+import { SORTABLE_BLOCK_ATTRIBUTES } from './constants';
+import BlockListButtons from './block-list-buttons';
+import BlockListItem from './block-list-item';
+import BlockListSortDropdown from './block-list-sort-dropdown';
+import { sortBlockNumbers } from './helpers';
 
 const BlockList = () => {
   const dispatch = useDispatch();
-  const blocks = useSelector((state) => state.metamask.blocks);
+  const displayingAsHex = useSelector((state) => state.metamask.displayAsHex);
+  const blocksObject = useSelector((state) => state.metamask.blocks);
+  const [attributeSortedBy, setAttributeToSortBy] = useState(
+    SORTABLE_BLOCK_ATTRIBUTES[0],
+  );
+  const sortedBlockNumbers = sortBlockNumbers(blocksObject, attributeSortedBy);
 
   return (
     <div className="block-list">
-      <div className="block-list__buttons">
-        <Button
-          type="secondary"
-          rounded
-          disabled
-          onClick={() => dispatch(resetBlockList())}
-        >
-          Reset Block List
-        </Button>
-        <Button type="secondary" rounded>
-          Display numbers as decimals
-        </Button>
-      </div>
-      {blocks.map((block, i) => {
-        return (
-          <div className="block-list__block" key={`block-${i}`}>
-            <span>{`Number: ${block.number}`}</span>
-            <span>{`Hash: ${block.hash}`}</span>
-            <span>{`Nonce: ${block.nonce}`}</span>
-            <span>{`GasLimit: ${block.gasLimit}`}</span>
-            <span>{`GasUsed: ${block.gasUsed}`}</span>
-            <span>{`Transaction Count: ${block.transactions.length}`}</span>
-          </div>
-        );
-      })}
+      <BlockListButtons
+        displayingAsHex={displayingAsHex}
+        onResetClicked={() => dispatch(resetBlockList())}
+        onToggleClicked={() => dispatch(setDisplayAsHex(!displayingAsHex))}
+      />
+      <BlockListSortDropdown
+        selectedAttribute={attributeSortedBy}
+        setSelectedAttribute={setAttributeToSortBy}
+      />
+      {sortedBlockNumbers.map((blockNumber) => (
+        <BlockListItem
+          key={blocksObject[blockNumber].hash}
+          block={blocksObject[blockNumber]}
+          displayAsHex={displayingAsHex}
+        />
+      ))}
     </div>
   );
 };

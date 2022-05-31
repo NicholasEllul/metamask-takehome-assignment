@@ -1,5 +1,14 @@
 import { SORTABLE_ATTRIBUTE_ENUM } from '../constants';
 
+export function sortBlockNumbers(blocksObject, attributeToSortOn) {
+  return Object.keys(blocksObject).sort((blockANum, blockBNum) => {
+    return (
+      blocksObject[blockBNum][attributeToSortOn] -
+      blocksObject[blockANum][attributeToSortOn]
+    );
+  });
+}
+
 export function humanizeAttributeName(attribute) {
   switch (attribute) {
     case SORTABLE_ATTRIBUTE_ENUM.Number:
