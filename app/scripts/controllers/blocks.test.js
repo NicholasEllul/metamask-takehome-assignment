@@ -150,6 +150,18 @@ describe('BlocksController', function () {
     });
   });
 
+  describe('setDisplayAsHex', function () {
+    it('should set the displayAsHex flag', function () {
+      const blockController = createBlockController();
+
+      blockController.setDisplayAsHex(true);
+      assert.strictEqual(blockController.store.getState().displayAsHex, true);
+
+      blockController.setDisplayAsHex(false);
+      assert.strictEqual(blockController.store.getState().displayAsHex, false);
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

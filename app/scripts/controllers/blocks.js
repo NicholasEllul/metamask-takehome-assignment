@@ -15,6 +15,7 @@ export default class BlockController {
     const { blockTracker, provider } = opts;
     const initState = {
       blocks: {},
+      displayAsHex: true,
     };
 
     this.store = new ObservableStore(initState);
@@ -36,6 +37,19 @@ export default class BlockController {
       blocks: {},
     });
   }
+
+  /**
+   * Sets whether the user wants to view the blocks as hex or decimal
+   *
+   * @param {boolean} displayAsHex - A boolean to indicate whether to view as hex or not
+   */
+
+  setDisplayAsHex(displayAsHex) {
+    this.store.updateState({
+      displayAsHex,
+    });
+  }
+
   /**
    * Handler called with the latest block number after each poll. It then will sync all blocks since the previous poll.
    *
