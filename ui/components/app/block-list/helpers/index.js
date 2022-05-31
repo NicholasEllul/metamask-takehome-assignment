@@ -1,0 +1,1 @@
+export { humanizeAttributeName } from './helpers';
